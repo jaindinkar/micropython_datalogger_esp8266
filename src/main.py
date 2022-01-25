@@ -1,34 +1,52 @@
 from machine import Pin, I2C
-import libs.ssd1306 as ssd1306
-import onewire, ds18x20
-import libs.bme280_sm as bme280_sm
-import modules.net_connect as net_connect
+from onewire import OneWire
+from time import sleep
 import urequests
 
-from time import sleep
+import ds18x20
+import libs.bme280_sm as bme280_sm
+import libs.ssd1306 as ssd1306
 
-# ESP8266 I2C Pin assignment
-i2c = I2C(scl=Pin(5), sda=Pin(4))
-# ESP8266 one-wire Pin assignment
-ds_pin = Pin(13)
-# Zapier POST url
-str_zap_post_url = "https://hooks.zapier.com/hooks/catch/11723895/b9j7ua0/"
+import modules.net_connect as net_connect
+from config.zapier import zap_webhook_url
+
 
 # Availablity check:
 is_available_ds18 = False
 is_available_bme280 = False
 is_available_ssd1306 = False
 
+# Unit constants
+unit_humi = '%RH'
+unit_temp = 'degC'
+unit_pres = 'mBar'
+
+# Initial Sensor values:
+str_temp_ds18 = None
+str_temp_bme280 = None
+str_humi_bme280 = None
+str_pres_bme280 = None
+
+# Update frequency (Seconds):
+update_freq = 30
+
+
+# ESP8266 I2C Pin assignment
+i2c = I2C(scl=Pin(5), sda=Pin(4))
+# ESP8266 One Wire Pin assignment
+one_wire = OneWire(Pin(13))
+
+
 # One-wire DS18B20 config:
 try:
-  ds_sensor = ds18x20.DS18X20(onewire.OneWire(ds_pin))
+  ds_sensor = ds18x20.DS18X20(one_wire)
   roms = ds_sensor.scan()
   if len(roms):
     print('Found DS devices: ', roms)
     is_available_ds18 = True
   
 except BaseException as e:
-  print(f"Could not found any DS18B sensor on pin {ds_pin}")
+  print("Could not found any DS18B sensor on assigned pin.")
   
 # I2C OLED Config:
 try:
@@ -75,19 +93,8 @@ if is_available_ssd1306:
   connectingToInternetScreen();
 net_connect.connect()
 
-# Unit constants
-unit_humi = '%RH'
-unit_temp = 'degC'
-unit_pres = 'mBar'
-
 # Screen Test
 # updateScreen()
-
-# Initial Sensor values:
-str_temp_ds18 = None
-str_temp_bme280 = None
-str_humi_bme280 = None
-str_pres_bme280 = None
 
 while True:
   # Reading DS18B20 Sensor
@@ -126,7 +133,7 @@ while True:
     request_headers = {'Content-Type': 'application/json'}
 
     request = urequests.post(
-      str_zap_post_url,
+      zap_webhook_url,
       json=payload,
       headers=request_headers
     )
@@ -136,5 +143,5 @@ while True:
   except BaseException as e:
     print('Failed to log sensor readings online.')
   
-  # Sleep for 10 sec.
-  sleep(10)
+  # Sleep for required duration before reading next value.
+  sleep(update_freq)
