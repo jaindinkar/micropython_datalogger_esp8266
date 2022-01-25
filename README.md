@@ -24,3 +24,6 @@ A simple MicroPython script for data logging environmental sensors on ESP8266 bo
 - Hotswappable sensors.
 - Key-pad -> Adding ssid and password on the go.
 - Key-pad -> Screen scrolling and menu navigation.
+
+### References:
+- More about editing Pymakr config file: https://github.com/pycom/pymakr-vsc/blob/HEAD/settings.md
