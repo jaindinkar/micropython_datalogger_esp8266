@@ -6,9 +6,6 @@ __pycache__/
 # C extensions
 *.so
 
-# Password Files
-src/config/wifi.py
-
 # Distribution / packaging
 .Python
 build/
