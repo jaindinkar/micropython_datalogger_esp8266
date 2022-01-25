@@ -1,14 +1,12 @@
 import network
-
-ssid = '$$StarNet$$'
-password = 'dinoRover997'
+from config.wifi import wifi_ssid, wifi_pass
 
 def connect():
   try:
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
     print('Connecting to internet...')
-    wlan.connect(ssid, password)
+    wlan.connect(wifi_ssid, wifi_pass)
     while wlan.isconnected() == False:
       pass
     print('Connection successful')

@@ -1,8 +1,8 @@
 from machine import Pin, I2C
-import ssd1306
+import libs.ssd1306 as ssd1306
 import onewire, ds18x20
-import bme280_sm
-import net_connect
+import libs.bme280_sm as bme280_sm
+import modules.net_connect as net_connect
 import urequests
 
 from time import sleep
@@ -47,14 +47,6 @@ except BaseException as e:
   print('Could not found any BME280 Sensor on I2C bus.')
   print(e)
 
-# Connecting to internet:
-net_connect.connect()
-
-# Unit constants
-unit_humi = '%RH'
-unit_temp = 'degC'
-unit_pres = 'mBar'
-
 # Function for updating OLED Screen
 def updateScreen(
   str_humi_bme280='N/A',
@@ -71,6 +63,22 @@ def updateScreen(
   oled.text('DS18B **>', 0, 45)
   oled.text(f"Temp: {'N/A' if str_temp_ds18 is None else str_temp_ds18} {unit_temp}", 0, 55)
   oled.show()
+
+def connectingToInternetScreen():
+  oled.fill(0)
+  oled.text('Connecting to', 0, 20)
+  oled.text('Internet...', 3, 30)
+  oled.show()
+
+# Connecting to internet:
+if is_available_ssd1306:
+  connectingToInternetScreen();
+net_connect.connect()
+
+# Unit constants
+unit_humi = '%RH'
+unit_temp = 'degC'
+unit_pres = 'mBar'
 
 # Screen Test
 # updateScreen()
@@ -91,7 +99,6 @@ while True:
   # Reading BME280 Sensor
   if is_available_bme280:
     str_t_p_h_bme280 = bme.values
-    print(str_t_p_h_bme280)
     str_temp_bme280 = str_t_p_h_bme280[0]
     str_pres_bme280 = str_t_p_h_bme280[1]
     str_humi_bme280 = str_t_p_h_bme280[2]
