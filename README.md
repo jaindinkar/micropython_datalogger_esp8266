@@ -2,6 +2,12 @@
 
 A simple MicroPython script for data logging environmental sensors on ESP8266 board with OLED data display.
 
+## Project Setup:
+![Setup for this project](docs/images/project-setup.jpg)
+
+OLED display showing data:
+![Working OLED display](docs/images/oled-working.jpg)
+
 ### Sensor Inputs:
 - Bosch's BME280 in I2C mode.
 - Maxim's DS18B29 in One Wire mode.
