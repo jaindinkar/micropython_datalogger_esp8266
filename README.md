@@ -3,6 +3,10 @@
 A simple MicroPython script for data logging environmental sensors on ESP8266 board with OLED data display.
 
 ## Project Setup:
+Wiring Diagram:
+![Wiring Diagram for this project](docs/images/wiring-diagram.png)
+
+Project Setup:
 ![Setup for this project](docs/images/project-setup.jpg)
 
 OLED display showing data:
