@@ -31,6 +31,8 @@ OLED display showing data:
 - MicroPython Firmware v1.18
 
 ### Expected New Features:
+- SD Card Logging. (Using web agents/hooks from 3rd party is not very economic for an individual looking to log a large dataset.)
+- Setting up Huginn a hackable and opensource alternative to IFTTT and Zapier. (For those who want their own service running.)
 - Hotswappable sensors.
 - Key-pad -> Adding ssid and password on the go.
 - Key-pad -> Screen scrolling and menu navigation.
