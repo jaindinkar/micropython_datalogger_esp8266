@@ -1,6 +1,6 @@
 # micropython_datalogger_esp8266
 
-A simple MicroPython script for data logging environmental sensors on ESP8266 board with OLED data display.
+A simple MicroPython script for data logging environmental sensors on ESP8266 board with OLED data display. This project follows SemVer guidelines for it's new releases/tags.
 
 ## Project Setup:
 Wiring Diagram:
