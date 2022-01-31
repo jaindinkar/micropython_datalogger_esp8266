@@ -4,8 +4,8 @@ from time import sleep
 import urequests
 
 import ds18x20
+import ssd1306
 import libs.bme280_sm as bme280_sm
-import libs.ssd1306 as ssd1306
 
 import modules.net_connect as net_connect
 from config.zapier import zap_webhook_url
