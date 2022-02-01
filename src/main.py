@@ -42,6 +42,9 @@ i2c = I2C(scl=Pin(5), sda=Pin(4))
 # ESP8266 One Wire Pin assignment
 one_wire = OneWire(Pin(13))
 
+# Print available I2C devices:
+print() # First space.
+print(f"Available I2C addresses: {list(map(hex, i2c.scan()))}")
 
 # One-wire DS18B20 config:
 try:
