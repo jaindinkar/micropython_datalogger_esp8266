@@ -3,9 +3,9 @@ from onewire import OneWire
 from time import sleep
 import urequests
 
-import ds18x20
-import ssd1306
-import libs.bme280_sm as bme280_sm
+from ds18x20 import DS18X20
+from ssd1306 import SSD1306_I2C
+from libs.bme280_sm import BME280
 
 import modules.net_connect as net_connect
 from config.zapier import zap_webhook_url
@@ -28,7 +28,7 @@ str_humi_bme280 = None
 str_pres_bme280 = None
 
 # Update frequency (Seconds):
-update_freq = 30
+update_freq = 15
 
 
 # ESP8266 I2C Pin assignment
@@ -39,11 +39,13 @@ one_wire = OneWire(Pin(13))
 
 # One-wire DS18B20 config:
 try:
-  ds_sensor = ds18x20.DS18X20(one_wire)
+  ds_sensor = DS18X20(one_wire)
   roms = ds_sensor.scan()
   if len(roms):
     print('Found DS devices: ', roms)
     is_available_ds18 = True
+  else:
+    print('No DS18B sensor present on assigned pin.')
   
 except BaseException as e:
   print("Could not found any DS18B sensor on assigned pin.")
@@ -52,14 +54,16 @@ except BaseException as e:
 try:
   oled_width = 128
   oled_height = 64
-  oled = ssd1306.SSD1306_I2C(oled_width, oled_height, i2c)
+  oled = SSD1306_I2C(oled_width, oled_height, i2c)
+  print('Found SSD 1306 OLED Display.')
   is_available_ssd1306 = True
 except BaseException as e:
   print('Could not found any SSD1306 OLED on I2C bus.')
 
 # I2C BME280 Config:
 try:
-  bme = bme280_sm.BME280(i2c=i2c)
+  bme = BME280(i2c=i2c)
+  print('Found BME 280 Sensor.')
   is_available_bme280 = True
 except BaseException as e:
   print('Could not found any BME280 Sensor on I2C bus.')
@@ -102,6 +106,7 @@ while True:
     ds_sensor.convert_temp()
     temp_ds18 = ds_sensor.read_temp(roms[0])
     str_temp_ds18 = f"{temp_ds18:.2f}"
+    print(f"DS18B reading: Temperature:{str_temp_ds18}")
   
   # Reading BME280 Sensor
   if is_available_bme280:
@@ -109,6 +114,7 @@ while True:
     str_temp_bme280 = str_t_p_h_bme280[0]
     str_pres_bme280 = str_t_p_h_bme280[1]
     str_humi_bme280 = str_t_p_h_bme280[2]
+    print(f"BME280 readings: Temperature:{str_temp_bme280} Pressure:{str_pres_bme280} Humidity:{str_humi_bme280}")
   
   # Updating OLED Screen
   if is_available_ssd1306:
@@ -128,8 +134,6 @@ while True:
       "temp_ds18b": str_temp_ds18
     }
     
-    print(payload)
-    
     request_headers = {'Content-Type': 'application/json'}
 
     request = urequests.post(
@@ -137,7 +141,7 @@ while True:
       json=payload,
       headers=request_headers
     )
-    print(request.text)
+    print(f"Post Response status: {request.status_code} {request.reason}")
     request.close()
 
   except BaseException as e:
