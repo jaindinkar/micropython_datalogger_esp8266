@@ -6,6 +6,7 @@ import urequests
 from ds18x20 import DS18X20
 from ssd1306 import SSD1306_I2C
 from libs.bme280_sm import BME280
+from libs.scd30_sm import SCD30
 
 import modules.net_connect as net_connect
 from config.zapier import zap_webhook_url
@@ -15,17 +16,22 @@ from config.zapier import zap_webhook_url
 is_available_ds18 = False
 is_available_bme280 = False
 is_available_ssd1306 = False
+is_available_scd30 = False
 
 # Unit constants
 unit_humi = '%RH'
 unit_temp = 'degC'
 unit_pres = 'mBar'
+unit_co2 = 'ppm'
 
 # Initial Sensor values:
 str_temp_ds18 = None
 str_temp_bme280 = None
 str_humi_bme280 = None
 str_pres_bme280 = None
+str_temp_scd30 = None
+str_humi_scd30 = None
+str_co2_scd30 = None
 
 # Update frequency (Seconds):
 update_freq = 15
@@ -67,6 +73,15 @@ try:
   is_available_bme280 = True
 except BaseException as e:
   print('Could not found any BME280 Sensor on I2C bus.')
+  print(e)
+
+# I2C SCD30 Config:
+try:
+  scd30 = SCD30(i2c, 0x61)
+  print('Found SCD30 Sensor.')
+  is_available_scd30 = True
+except BaseException as e:
+  print('Could not found any SCD30 Sensor on I2C bus.')
   print(e)
 
 # Function for updating OLED Screen
@@ -115,6 +130,14 @@ while True:
     str_pres_bme280 = str_t_p_h_bme280[1]
     str_humi_bme280 = str_t_p_h_bme280[2]
     print(f"BME280 readings: Temperature:{str_temp_bme280} Pressure:{str_pres_bme280} Humidity:{str_humi_bme280}")
+
+  # Reading SCD30 Sensor
+  if is_available_scd30:
+    # Wait for sensor data to be ready to read (by default every 2 seconds)
+    if scd30.get_status_ready() == 1:
+      print(f"SCD30 readings: {scd30.read_measurement()}")
+    else:
+      print("SCD30 readings: Waiting for next cycle for the result.")
   
   # Updating OLED Screen
   if is_available_ssd1306:
