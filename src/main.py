@@ -34,8 +34,7 @@ str_humi_scd30 = None
 str_co2_scd30 = None
 
 # Update frequency (Seconds):
-update_freq = 15
-
+update_freq = 5
 
 # ESP8266 I2C Pin assignment
 i2c = I2C(scl=Pin(5), sda=Pin(4))
@@ -138,7 +137,11 @@ while True:
   if is_available_scd30:
     # Wait for sensor data to be ready to read (by default every 2 seconds)
     if scd30.get_status_ready() == 1:
-      print(f"SCD30 readings: {scd30.read_measurement()}")
+      str_c_t_h_scd30 = list(map(str, scd30.read_measurement()))
+      str_co2_scd30 = str_c_t_h_scd30[0]
+      str_temp_scd30 = str_c_t_h_scd30[1]
+      str_humi_scd30 = str_c_t_h_scd30[2]
+      print(f"SCD30 readings: Temperature:{str_temp_scd30} CO2 ppm:{str_co2_scd30} Humidity:{str_humi_scd30}")
     else:
       print("SCD30 readings: Waiting for next cycle for the result.")
   
@@ -173,5 +176,9 @@ while True:
   except BaseException as e:
     print('Failed to log sensor readings online.')
   
+  print('-----------------------------------------------------------')
+  # Takes atleast 1ms to clean garbage objects created,
+  # prevents heap overflow crashes in limited RAM space.
+  gc.collect()
   # Sleep for required duration before reading next value.
   sleep(update_freq)
