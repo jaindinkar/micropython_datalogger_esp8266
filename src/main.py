@@ -42,7 +42,7 @@ i2c = I2C(scl=Pin(5), sda=Pin(4))
 one_wire = OneWire(Pin(13))
 
 # Print available I2C devices:
-print() # First space.
+print()  # First space.
 print(f"Available I2C addresses: {list(map(hex, i2c.scan()))}")
 
 # One-wire DS18B20 config:
@@ -54,10 +54,9 @@ try:
     is_available_ds18 = True
   else:
     print('No DS18B sensor present on assigned pin.')
-  
 except BaseException as e:
   print("Could not found any DS18B sensor on assigned pin.")
-  
+
 # I2C OLED Config:
 try:
   oled_width = 128
@@ -86,22 +85,37 @@ except BaseException as e:
   print('Could not found any SCD30 Sensor on I2C bus.')
   print(e)
 
+
 # Function for updating OLED Screen
 def updateScreen(
   str_humi_bme280='N/A',
   str_temp_bme280='N/A',
   str_pres_bme280='N/A',
-  str_temp_ds18='N/A'
+  str_temp_ds18='N/A',
+  str_humi_scd30='N/A',
+  str_temp_scd30='N/A',
+  str_co2_scd30='N/A'
 ):
   oled.fill(0)
-  oled.text('BME280 **>', 0, 0)
-  oled.text(f"Humi: {'N/A' if str_humi_bme280 is None else str_humi_bme280} {unit_humi}", 0, 10)
-  oled.text(f"Temp: {'N/A' if str_temp_bme280 is None else str_temp_bme280} {unit_temp}", 0, 20)
-  oled.text(f"Pres: {'N/A' if str_pres_bme280 is None else str_pres_bme280} {unit_pres}", 0, 30)
-  oled.text('', 0, 40)
-  oled.text('DS18B **>', 0, 45)
-  oled.text(f"Temp: {'N/A' if str_temp_ds18 is None else str_temp_ds18} {unit_temp}", 0, 55)
+  oled.text(
+      f"BH-{'N/A' if str_humi_bme280 is None else str_humi_bme280} {unit_humi}", 0, 0)
+  oled.text(
+      f"BT-{'N/A' if str_temp_bme280 is None else str_temp_bme280} {unit_temp}", 0, 10)
+  oled.text(
+      f"BP-{'N/A' if str_pres_bme280 is None else str_pres_bme280} {unit_pres}", 0, 20)
+
+  oled.text(
+      f"SH-{'N/A' if str_humi_scd30 is None else str_humi_scd30} {unit_humi}", 0, 35)
+  oled.text(
+      f"ST-{'N/A' if str_temp_scd30 is None else str_temp_scd30} {unit_temp}", 0, 45)
+  oled.text(
+      f"SC-{'N/A' if str_co2_scd30 is None else str_co2_scd30} {unit_co2}", 0, 55)
+    
+  # oled.text(
+  #     f"DT-{'N/A' if str_temp_ds18 is None else str_temp_ds18} {unit_temp}", 0, 60)
+
   oled.show()
+
 
 def connectingToInternetScreen():
   oled.fill(0)
@@ -109,9 +123,10 @@ def connectingToInternetScreen():
   oled.text('Internet...', 3, 30)
   oled.show()
 
+
 # Connecting to internet:
 if is_available_ssd1306:
-  connectingToInternetScreen();
+  connectingToInternetScreen()
 net_connect.connect()
 
 # Screen Test
@@ -124,14 +139,15 @@ while True:
     temp_ds18 = ds_sensor.read_temp(roms[0])
     str_temp_ds18 = f"{temp_ds18:.2f}"
     print(f"DS18B reading: Temperature:{str_temp_ds18}")
-  
+
   # Reading BME280 Sensor
   if is_available_bme280:
     str_t_p_h_bme280 = bme.values
     str_temp_bme280 = str_t_p_h_bme280[0]
     str_pres_bme280 = str_t_p_h_bme280[1]
     str_humi_bme280 = str_t_p_h_bme280[2]
-    print(f"BME280 readings: Temperature:{str_temp_bme280} Pressure:{str_pres_bme280} Humidity:{str_humi_bme280}")
+    print(
+      f"BME280 readings: Temperature:{str_temp_bme280} Pressure:{str_pres_bme280} Humidity:{str_humi_bme280}")
 
   # Reading SCD30 Sensor
   if is_available_scd30:
@@ -141,19 +157,23 @@ while True:
       str_co2_scd30 = str_c_t_h_scd30[0]
       str_temp_scd30 = str_c_t_h_scd30[1]
       str_humi_scd30 = str_c_t_h_scd30[2]
-      print(f"SCD30 readings: Temperature:{str_temp_scd30} CO2 ppm:{str_co2_scd30} Humidity:{str_humi_scd30}")
+      print(
+        f"SCD30 readings: Temperature:{str_temp_scd30} CO2 ppm:{str_co2_scd30} Humidity:{str_humi_scd30}")
     else:
       print("SCD30 readings: Waiting for next cycle for the result.")
-  
+
   # Updating OLED Screen
   if is_available_ssd1306:
     updateScreen(
       str_humi_bme280=str_humi_bme280,
       str_temp_bme280=str_temp_bme280,
       str_pres_bme280=str_pres_bme280,
-      str_temp_ds18 = str_temp_ds18
+      str_temp_ds18=str_temp_ds18,
+      str_humi_scd30=str_humi_scd30,
+      str_temp_scd30=str_temp_scd30,
+      str_co2_scd30=str_co2_scd30,
     )
-  
+
   # Release the webhook to log data to google sheets:
   try:
     payload = {
@@ -162,7 +182,7 @@ while True:
       "pres_bme280": str_pres_bme280,
       "temp_ds18b": str_temp_ds18
     }
-    
+
     request_headers = {'Content-Type': 'application/json'}
 
     request = urequests.post(
@@ -175,7 +195,7 @@ while True:
 
   except BaseException as e:
     print('Failed to log sensor readings online.')
-  
+
   print('-----------------------------------------------------------')
   # Takes atleast 1ms to clean garbage objects created,
   # prevents heap overflow crashes in limited RAM space.
