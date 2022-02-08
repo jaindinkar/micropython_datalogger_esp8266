@@ -4,7 +4,7 @@ A simple MicroPython script for data logging environmental sensors on ESP8266 bo
 
 ## Project Setup:
 Wiring Diagram:
-![Wiring Diagram for this project](docs/images/wiring-diagram.png)
+![Wiring Diagram for this project](docs/images/wiring-diagram-v0.2.0.png)
 
 Project Setup:
 ![Setup for this project](docs/images/project-setup.jpg)
@@ -15,6 +15,7 @@ OLED display showing data:
 ### Sensor Inputs:
 - Bosch's BME280 in I2C mode.
 - Maxim's DS18B29 in One Wire mode.
+- Sensirion's SCD30 in I2C mode.
 
 ### Outputs:
 - Serial terminal debugging logs.
