@@ -2,7 +2,7 @@
 
 ### Description
 - Implementation for Sd Card in ESP32 using VSPI.
-- No modification in the original driver is needed to work with esp32 as of 17/02/2022. (Link to driver)[https://github.com/micropython/micropython/blob/master/drivers/sdcard/sdcard.py]
+- No modification in the original driver is needed to work with esp32 as of 17/02/2022. [Link to driver](https://github.com/micropython/micropython/blob/master/drivers/sdcard/sdcard.py)
 
 #### General Hardware Connection Points
 - Maintain short and proper connections to the device, this module is succeptable to the undervoltage and underpower.
