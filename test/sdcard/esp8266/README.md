@@ -1,7 +1,7 @@
 ## ESP8266 SD Card Tests
 
 ### Description
-- Hardware SPI port used on GPIOs 12,13,14,15. Use Pin 15 for SPI_CS with caution as it is used to set device's boot state and might cause resets. (not observed in our case) [Link 1](https://github.com/esp8266/Arduino/issues/2466) | [Link 2](https://www.instructables.com/ESP8266-Using-GPIO0-GPIO2-as-inputs/)
+- Hardware SPI port used on GPIOs 12,13,14,15. Use Pin 15 for SPI_CS with caution as it is used to set device's boot state and might cause resets. (not observed in our case) [Link 1](https://github.com/esp8266/Arduino/issues/2466) | [Link 2](https://www.instructables.com/ESP8266-Using-GPIO0-GPIO2-as-inputs/) | [ESP8266 Pinout ref] (https://randomnerdtutorials.com/esp8266-pinout-reference-gpios/)
 - Original driver provided as of 17/02/2022 for ESP8266 sd card access does not properly work in our case. [Link to driver](https://github.com/micropython/micropython/blob/master/drivers/sdcard/sdcard.py) | [Adafruit video on this](https://www.youtube.com/watch?v=-1nzG1BdPps) | [Link to delay suggestion](https://forum.micropython.org/viewtopic.php?t=3404&start=10#p21454)
 - Changes are done in this attached driver to accomodate that.
 - Also given expamples in the driver code does not work, we have also provided a sufficient implementation for this in main.py

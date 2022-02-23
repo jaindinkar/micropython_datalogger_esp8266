@@ -2,9 +2,8 @@ import os
 from machine import Pin, SPI
 from sdcard import SDCard
 
-hspi_en = Pin(15) 
-# Can be any gpio pin. Use pin 15 with caution it is used for selecting boot mode in esp8266and might cause resets if pulled up. 
-hspi = SPI(1, baudrate=80000000, polarity=0, phase=0)
+hspi_en = Pin(15) # D3 Flash button might not work. Can be any gpio pin. Follow boot pin caution if reset occurs.
+hspi = SPI(1, baudrate=80000000, polarity=0, phase=0) # SPI will take GPIO 12,13,14 | D6,D7,D5 automatically.
 
 sd = SDCard(hspi, hspi_en)
 vfs = os.VfsFat(sd)
