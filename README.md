@@ -20,6 +20,7 @@ OLED display showing data:
 ### Outputs:
 - Serial terminal debugging logs.
 - SSD1306 White OLED Display in I2C mode.
+- SD card logs.
 - Logging using Zapier workflow (zap) Integrating zapier webhook with Google sheets.
 
 ### Dev console config:
@@ -32,7 +33,7 @@ OLED display showing data:
 - MicroPython Firmware v1.18
 
 ### Expected New Features:
-- SD Card Logging. (Using web agents/hooks from 3rd party is not very economic for an individual looking to log a large dataset.)
+- [IN PROGRESS] SD Card Logging. (Using web agents/hooks from 3rd party is not very economic for an individual looking to log a large dataset.)
 - Setting up Huginn a hackable and opensource alternative to IFTTT and Zapier. (For those who want their own service running.)
 - Hotswappable sensors.
 - Key-pad -> Adding ssid and password on the go.
