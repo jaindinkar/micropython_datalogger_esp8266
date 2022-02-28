@@ -36,7 +36,7 @@ is_available_scd30 = False
 is_available_sd = False
 
 
-print()  # First space.
+print()  # First space for terminal print.
 
 # SPI sd card config:
 try:
@@ -88,7 +88,7 @@ except BaseException as e:
   print(f'Could not found any SSD1306 OLED on I2C bus. Error: {e}')
 
 # I2C BME280 Config:
-sleep_ms(300)
+sleep_ms(500)
 try:
   bme = BME280(i2c=i2c)
   print('Found BME 280 Sensor.')
@@ -97,7 +97,7 @@ except BaseException as e:
   print(f'Could not found any BME280 Sensor on I2C bus. Error: {e}')
 
 # I2C SCD30 Config:
-sleep_ms(300)
+sleep_ms(500)
 try:
   scd30 = SCD30(i2c, 0x61)
   print('Found SCD30 Sensor.')
