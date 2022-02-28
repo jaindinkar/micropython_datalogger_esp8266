@@ -1,6 +1,6 @@
 # micropython_datalogger_esp8266
 
-A simple MicroPython script for data logging environmental sensors on ESP8266 board with OLED data display. This project follows SemVer-v2.0.0 guidelines for it's new releases/tags.
+A simple MicroPython script for data logging environmental sensors on ESP8266 board with OLED data display. This project follows SemVer-v2.0.0 guidelines for it's new releases/tags. Libs used in this project are freezed(.mpy), using [mpy-cross](https://github.com/micropython/micropython/tree/master/mpy-cross).
 
 ## Project Setup:
 Wiring Diagram:
@@ -40,4 +40,5 @@ OLED display showing data:
 - Key-pad -> Screen scrolling and menu navigation.
 
 ### References:
-- More about editing Pymakr config file: https://github.com/pycom/pymakr-vsc/blob/HEAD/settings.md
+- More about editing Pymakr config file:[Pymaker config](https://github.com/pycom/pymakr-vsc/blob/HEAD/settings.md)
+- Python cross compilation to bytecode: [mpy-cross](https://github.com/micropython/micropython/tree/master/mpy-cross)
