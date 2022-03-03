@@ -8,10 +8,13 @@
 - Changing the SD Card can be performed by executing a certain set of instructions to update the directory. (see code in main.py)
 - If you are getting ***OSError: [Errno 1] EPERM*** while accessing the card you might be in a different directory then supposed to be. Use OS filesystem commands to navigate to "/" and unmount the mounted partition.
 
-#### General Hardware Connection Points
+### General Hardware Connection Points
 - Maintain short and proper connections to the device, this module is succeptable to the undervoltage and underpower.
 - Test your du-point connectors before use (they should be conductive with resistance lesser than 1 ohm).
 - Use a 5 volt supply for the operation. Less than that might cause problems though 4.75 v also works fine in our case.
+
+### SD card data corruption
+- Data corruption in sd card is a common problem, it can occur due to incorrect unmounting of the card. Data can easily be retrieved using fsck utility in Linux systems. [Stackoverflow Link](https://askubuntu.com/questions/277848/damaged-sd-card-badly-unmounted-how-to-fix)
 
 ### References:
 Micropython OS services: [Link](https://docs.micropython.org/en/latest/library/os.html)
