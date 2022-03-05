@@ -1,6 +1,8 @@
 # micropython_datalogger_esp8266
 
-A simple MicroPython script for data logging environmental sensors on ESP8266 board with OLED data display. This project follows SemVer-v2.0.0 guidelines for it's new releases/tags. Libs used in this project are freezed(.mpy), using [mpy-cross](https://github.com/micropython/micropython/tree/master/mpy-cross).
+A simple MicroPython script for data logging environmental sensors on ESP8266 board with OLED data display. Libs used in this project are freezed(.mpy), using [mpy-cross](https://github.com/micropython/micropython/tree/master/mpy-cross). Original source file is also included, checkout <kbd>driver-libs</kbd> directory. Libs under this directory can be changed and recompiled to suit your needs but it's seldom required unless you know what you are doing. Happy Hacking!!
+
+** This project follows SemVer-v2.0.0 guidelines for it's new releases/tags.
 
 ## Project Setup:
 Wiring Diagram:
