@@ -41,7 +41,7 @@ print()  # First space for terminal print.
 sleep_ms(500)
 try:
   storage = Storage(hspi, p_hspi_en)
-  print(storage.storage_content())
+  storage.print_storage_content()
 except BaseException as e:
   print(f"[ERROR]: SD card error. Error: {e}")
 else:
