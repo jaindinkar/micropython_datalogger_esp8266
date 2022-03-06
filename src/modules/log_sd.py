@@ -84,6 +84,7 @@ class Storage:
                         f.flush()
                 except BaseException as e:
                     print(f"[SD FILE WRITE ERROR] SD Card: File creation and write Failed. Error: {e}")
+                    raise Exception(f"{e}")
             finally:
                 self.__unmount_storage()
         else:
