@@ -3,11 +3,11 @@ from machine import Pin, I2C, SPI
 from onewire import OneWire
 
 from ds18x20 import DS18X20
-from ssd1306 import SSD1306_I2C
 from libs.bme280_sm import BME280
 from libs.scd30_sm import SCD30
 
 from modules.log_sd import Storage
+from modules.log_oled import OLED
 import modules.net_connect as net_connect
 
 
@@ -67,7 +67,7 @@ sleep_ms(500)
 try:
   oled_width = 128
   oled_height = 64
-  oled = SSD1306_I2C(oled_width, oled_height, i2c)
+  oled = OLED(oled_width, oled_height, i2c)
 except BaseException as e:
   print(f'[ERROR]: SSD1306 OLED on I2C bus. Error: {e}')
 else:
@@ -95,59 +95,14 @@ else:
   is_available_scd30 = True
 
 
-# Function for updating OLED Screen
-def updateScreen(
-  str_humi_bme280='N/A',
-  str_temp_bme280='N/A',
-  str_pres_bme280='N/A',
-  str_temp_ds18='N/A',
-  str_humi_scd30='N/A',
-  str_temp_scd30='N/A',
-  str_co2_scd30='N/A'
-):
-  # Unit constants
-  unit_humi = '%RH'
-  unit_temp = 'degC'
-  unit_pres = 'mBar'
-  unit_co2 = 'ppm'
-
-  oled.fill(0)
-  oled.text(
-      f"BH-{'N/A' if str_humi_bme280 is '' else str_humi_bme280} {unit_humi}", 0, 0)
-  oled.text(
-      f"BT-{'N/A' if str_temp_bme280 is '' else str_temp_bme280} {unit_temp}", 0, 10)
-  oled.text(
-      f"BP-{'N/A' if str_pres_bme280 is '' else str_pres_bme280} {unit_pres}", 0, 20)
-
-  oled.text(
-      f"SH-{'N/A' if str_humi_scd30 is '' else str_humi_scd30} {unit_humi}", 0, 35)
-  oled.text(
-      f"ST-{'N/A' if str_temp_scd30 is '' else str_temp_scd30} {unit_temp}", 0, 45)
-  oled.text(
-      f"SC-{'N/A' if str_co2_scd30 is '' else str_co2_scd30} {unit_co2}", 0, 55)
-    
-  # oled.text(
-  #     f"DT-{'N/A' if str_temp_ds18 is None else str_temp_ds18} {unit_temp}", 0, 60)
-
-  oled.show()
-
-
-def connectingToInternetScreen():
-  oled.fill(0)
-  oled.text('Connecting to', 0, 20)
-  oled.text('Internet...', 3, 30)
-  oled.show()
-
 # Connecting to internet:
 if is_available_ssd1306:
-  connectingToInternetScreen()
+  oled.connectingToInternetScreen()
 net_connect.connect()
+
 
 # Garbage collector. Important.
 gc.collect()
-
-# Screen Test
-# updateScreen()
 
 # Update frequency (Seconds):
 update_freq = 5
@@ -203,7 +158,7 @@ while True:
   # Updating OLED Screen
   if is_available_ssd1306:
     try:
-      updateScreen(
+      oled.updateScreen(
         str_humi_bme280=str_humi_bme280,
         str_temp_bme280=str_temp_bme280,
         str_pres_bme280=str_pres_bme280,
